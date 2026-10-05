@@ -1,0 +1,128 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+/* ---------------------------------------------------------------
+   Theme tokens — change these to restyle the whole site.
+   Light by default, follows the visitor's system dark mode.
+---------------------------------------------------------------- */
+:root {
+    --paper: #f6f3ee;
+    --paper-raised: #fffdf9;
+    --ink: #1c1a17;
+    --ink-soft: #5b564e;
+    --line: #e2dcd2;
+    --accent: #c2410c;       /* burnt orange */
+    --accent-ink: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --paper: #141311;
+        --paper-raised: #1c1a17;
+        --ink: #f1ece4;
+        --ink-soft: #a8a196;
+        --line: #2e2b27;
+        --accent: #fb923c;
+        --accent-ink: #1c1a17;
+    }
+}
+
+@theme inline {
+    --color-paper: var(--paper);
+    --color-raised: var(--paper-raised);
+    --color-ink: var(--ink);
+    --color-soft: var(--ink-soft);
+    --color-line: var(--line);
+    --color-accent: var(--accent);
+    --color-accent-ink: var(--accent-ink);
+
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Instrument Serif', ui-serif, Georgia, serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+    background: var(--accent);
+    color: var(--accent-ink);
+}
+
+/* Small reusable pieces (Tailwind v4 custom utilities) */
+@utility eyebrow {
+    @apply font-mono text-xs uppercase tracking-[0.18em] text-soft;
+}
+
+@utility tag {
+    @apply inline-flex items-center rounded-full border border-line px-3 py-1 font-mono text-[11px] text-soft;
+}
+
+@utility btn {
+    @apply inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition;
+}
+
+@utility btn-primary {
+    @apply btn bg-ink text-paper hover:bg-accent hover:text-accent-ink;
+}
+
+@utility btn-ghost {
+    @apply btn border border-line hover:border-ink;
+}
+
+@utility field {
+    @apply w-full rounded-xl border border-line bg-raised px-4 py-3 text-sm outline-none transition placeholder:text-soft/70 focus:border-accent;
+}
+
+@utility link-underline {
+    @apply underline decoration-line decoration-1 underline-offset-4 transition hover:decoration-accent;
+}
+
+/* Case-study typography (markdown output) */
+.prose-case {
+    @apply text-[17px] leading-relaxed text-ink/90;
+}
+.prose-case h2 {
+    @apply mt-12 mb-4 font-display text-3xl text-ink;
+}
+.prose-case h3 {
+    @apply mt-8 mb-3 text-lg font-semibold text-ink;
+}
+.prose-case p {
+    @apply my-4;
+}
+.prose-case ul {
+    @apply my-4 list-disc space-y-2 pl-6 marker:text-accent;
+}
+.prose-case ol {
+    @apply my-4 list-decimal space-y-2 pl-6 marker:text-accent;
+}
+.prose-case a {
+    @apply link-underline text-accent;
+}
+.prose-case code {
+    @apply rounded bg-raised px-1.5 py-0.5 font-mono text-[0.85em] border border-line;
+}
+.prose-case pre {
+    @apply my-6 overflow-x-auto rounded-xl border border-line bg-raised p-4 text-sm;
+}
+.prose-case pre code {
+    @apply border-0 bg-transparent p-0;
+}
+.prose-case blockquote {
+    @apply my-6 border-l-2 border-accent pl-5 italic text-soft;
+}
+.prose-case img {
+    @apply my-6 rounded-xl border border-line;
+}
