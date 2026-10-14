@@ -1,4 +1,20 @@
 <x-layouts.app>
+    {{-- Structured data so search engines can show a richer result for your name --}}
+    <x-slot:head>
+        <script type="application/ld+json">
+            {!! json_encode(array_filter([
+                '@context' => 'https://schema.org',
+                '@type' => 'Person',
+                'name' => config('portfolio.name'),
+                'jobTitle' => config('portfolio.role'),
+                'description' => config('portfolio.tagline'),
+                'url' => route('home'),
+                'email' => 'mailto:'.config('portfolio.email'),
+                'address' => config('portfolio.location'),
+                'sameAs' => array_values(array_filter([config('portfolio.github'), config('portfolio.linkedin')])),
+            ]), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) !!}
+        </script>
+    </x-slot:head>
 
     {{-- Hero --}}
     <section class="mx-auto max-w-6xl px-5 pt-16 pb-20 sm:px-8 md:pt-28 md:pb-28">

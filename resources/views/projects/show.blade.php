@@ -1,9 +1,4 @@
-<x-layouts.app :title="$project->title" :description="$project->summary">
-    @if ($project->coverUrl())
-        <x-slot:head>
-            <meta property="og:image" content="{{ $project->coverUrl() }}">
-        </x-slot:head>
-    @endif
+<x-layouts.app :title="$project->title" :description="$project->summary" :image="$project->coverUrl()">
 
     <article>
         <header class="mx-auto max-w-4xl px-5 pt-14 sm:px-8 md:pt-20">
@@ -62,17 +57,23 @@
         @endif
     </article>
 
-    @if ($others->isNotEmpty())
-        <section class="border-t border-line">
-            <div class="mx-auto max-w-6xl px-5 py-20 sm:px-8">
-                <p class="eyebrow">More work</p>
-                <div class="mt-8 grid gap-6 md:grid-cols-2">
-                    @foreach ($others as $other)
-                        <x-project-card :project="$other" />
-                    @endforeach
-                </div>
+    @if ($previous || $next)
+        <nav class="border-t border-line" aria-label="More projects">
+            <div class="mx-auto grid max-w-6xl gap-6 px-5 py-20 sm:px-8 md:grid-cols-2">
+                @if ($previous)
+                    <div>
+                        <p class="eyebrow mb-4">&larr; Previous project</p>
+                        <x-project-card :project="$previous" />
+                    </div>
+                @endif
+                @if ($next)
+                    <div @class(['md:col-start-2' => ! $previous])>
+                        <p class="eyebrow mb-4 md:text-right">Next project &rarr;</p>
+                        <x-project-card :project="$next" />
+                    </div>
+                @endif
             </div>
-        </section>
+        </nav>
     @endif
 
     @include('partials.contact')

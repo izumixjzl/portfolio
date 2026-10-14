@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\Skill;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PortfolioController extends Controller
@@ -24,24 +25,42 @@ class PortfolioController extends Controller
         ]);
     }
 
-    public function projects(): View
+    public function projects(Request $request): View
     {
-        return view('projects.index', [
-            'projects' => Project::published()->ordered()->get(),
-        ]);
+        $all = Project::published()->ordered()->get();
+
+        // Every technology used across published projects, most common first.
+        $techs = $all->pluck('tech_stack')->flatten()->filter()
+            ->countBy()->sortDesc()->keys();
+
+        // ?tech=Laravel narrows the list; unknown values just show everything.
+        $active = $techs->first(fn ($tech) => strcasecmp($tech, (string) $request->query('tech')) === 0);
+
+        $projects = $active
+            ? $all->filter(fn ($p) => in_array($active, $p->tech_stack ?? [], true))->values()
+            : $all;
+
+        return view('projects.index', compact('projects', 'techs', 'active'));
     }
 
     public function show(Project $project): View
     {
         abort_unless($project->is_published, 404);
 
-        $others = Project::published()
-            ->whereKeyNot($project->getKey())
-            ->ordered()
-            ->take(2)
-            ->get();
+        // Previous / next follow the same order as the Work page, wrapping around.
+        $all = Project::published()->ordered()->get();
+        $index = $all->search(fn ($p) => $p->is($project));
+        $count = $all->count();
 
-        return view('projects.show', compact('project', 'others'));
+        $previous = $count > 1 ? $all[($index - 1 + $count) % $count] : null;
+        $next = $count > 1 ? $all[($index + 1) % $count] : null;
+
+        // With exactly two projects, both directions point at the same one.
+        if ($previous?->is($next)) {
+            $previous = null;
+        }
+
+        return view('projects.show', compact('project', 'previous', 'next'));
     }
 
     private function groupedSkills()

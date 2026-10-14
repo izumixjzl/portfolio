@@ -20,6 +20,9 @@ return [
     'linkedin' => env('PORTFOLIO_LINKEDIN'),
     'resume_url' => env('PORTFOLIO_RESUME_URL'),
 
+    // Image shown when the site is shared on social media, e.g. "images/og.png" in public/.
+    'og_image' => env('PORTFOLIO_OG_IMAGE'),
+
     // Only this account can sign in to /admin in production.
     'admin_email' => env('ADMIN_EMAIL', 'admin@example.com'),
     'admin_password' => env('ADMIN_PASSWORD', 'password'),

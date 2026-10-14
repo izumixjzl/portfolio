@@ -17,6 +17,7 @@
     --line: #e2dcd2;
     --accent: #c2410c;       /* burnt orange */
     --accent-ink: #ffffff;
+    --danger: #b91c1c;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -28,6 +29,7 @@
         --line: #2e2b27;
         --accent: #fb923c;
         --accent-ink: #1c1a17;
+        --danger: #f87171;
     }
 }
 
@@ -39,6 +41,7 @@
     --color-line: var(--line);
     --color-accent: var(--accent);
     --color-accent-ink: var(--accent-ink);
+    --color-danger: var(--danger);
 
     --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
     --font-display: 'Instrument Serif', ui-serif, Georgia, serif;
@@ -53,6 +56,12 @@ body {
     background: var(--paper);
     color: var(--ink);
     -webkit-font-smoothing: antialiased;
+}
+
+/* Visible focus ring for keyboard users on every link, button and field */
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
 }
 
 ::selection {
@@ -82,7 +91,11 @@ body {
 }
 
 @utility field {
-    @apply w-full rounded-xl border border-line bg-raised px-4 py-3 text-sm outline-none transition placeholder:text-soft/70 focus:border-accent;
+    @apply w-full rounded-xl border border-line bg-raised px-4 py-3 text-sm transition placeholder:text-soft/70 focus:border-accent focus-visible:outline-offset-0 aria-invalid:border-danger;
+}
+
+@utility field-error {
+    @apply mt-1.5 text-xs text-danger;
 }
 
 @utility link-underline {
